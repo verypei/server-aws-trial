@@ -3,11 +3,12 @@ name: Deploy to AWS
 on:
   push:
     branches:
-      - main  # This will trigger the action when you push to the 'main' branch
+      - main  # Trigger action when pushing to the main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest  # Runs on a GitHub-hosted Ubuntu runner
+    
     steps:
       # Step 1: Checkout the repo
       - name: Checkout Repo
@@ -17,25 +18,15 @@ jobs:
       - name: Set up SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.AWS_HOST }}   # Reference to your AWS server IP stored as a secret
-          username: ubuntu                # Assuming your AWS server uses 'ubuntu' user
-          key: ${{ secrets.AWS_SSH_KEY }}  # Reference to your private SSH key stored as a secret
-          script: |
-            # Ensure the directory exists
-            mkdir -p /home/ubuntu/app
+          host: 3.106.248.7  # Your AWS server IP
+          username: ubuntu   # SSH user on AWS instance
+          key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
+
+      # Step 3: Deploy your application
+      - name: Deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@3.106.248.7 << 'EOF'
             cd /home/ubuntu/app
-
-            # If git repository doesn't exist, clone it
-            if [ ! -d ".git" ]; then
-              git clone https://github.com/your-username/your-repository.git /home/ubuntu/app
-            fi
-
-            # Pull the latest changes
             git pull origin main
-
-            # Ensure Docker Compose is installed (optional)
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-
-            # Build and restart with Docker Compose
-            docker-compose up --build -d
+            docker-compose up --build -d  # Rebuild and restart your app with Docker
+          EOF
