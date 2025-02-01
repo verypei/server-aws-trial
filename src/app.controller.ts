@@ -9,7 +9,6 @@ export class AppController {
   async getHello() {
     try {
       return await this.appService.getHello();
-
     } catch (error) {
     }
   }
