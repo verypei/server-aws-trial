@@ -1,0 +1,26 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main  # This will trigger the action when you push to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # Runs on a GitHub-hosted Ubuntu runner
+    steps:
+      # Step 1: Checkout the repo
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH for connecting to your AWS server
+      - name: Set up SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}  # Your AWS server IP (as secret)
+          username: ubuntu               # Assuming your AWS server uses 'ubuntu' user
+          key: ${{ secrets.AWS_SSH_KEY }}  # Your private SSH key (as secret)
+          script: |
+            cd /home/ubuntu/app
+            git pull origin main          # Pull the latest code
+            docker-compose up --build -d  # Rebuild and restart your app with Docker
