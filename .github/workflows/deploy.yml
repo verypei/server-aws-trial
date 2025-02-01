@@ -17,10 +17,25 @@ jobs:
       - name: Set up SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.AWS_HOST }}  # Your AWS server IP (as secret)
-          username: ubuntu               # Assuming your AWS server uses 'ubuntu' user
-          key: ${{ secrets.AWS_SSH_KEY }}  # Your private SSH key (as secret)
+          host: ${{ secrets.AWS_HOST }}   # Reference to your AWS server IP stored as a secret
+          username: ubuntu                # Assuming your AWS server uses 'ubuntu' user
+          key: ${{ secrets.AWS_SSH_KEY }}  # Reference to your private SSH key stored as a secret
           script: |
+            # Ensure the directory exists
+            mkdir -p /home/ubuntu/app
             cd /home/ubuntu/app
-            git pull origin main          # Pull the latest code
-            docker-compose up --build -d  # Rebuild and restart your app with Docker
+
+            # If git repository doesn't exist, clone it
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/your-username/your-repository.git /home/ubuntu/app
+            fi
+
+            # Pull the latest changes
+            git pull origin main
+
+            # Ensure Docker Compose is installed (optional)
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+
+            # Build and restart with Docker Compose
+            docker-compose up --build -d
