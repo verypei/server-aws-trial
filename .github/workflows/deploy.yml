@@ -46,7 +46,7 @@ jobs:
             git pull origin main
             npm install
             echo "Stopping all containers..."
-            sudo docker stop very438084/server-aws-trial:latest
+            sudo docker stop $(docker ps -q)
             echo "Pulling latest image..."
             sudo docker pull very438084/server-aws-trial:latest
             sudo docker-compose up --force-recreate --build -d
