@@ -18,7 +18,7 @@ jobs:
       - name: Set up SSH
         uses: appleboy/ssh-action@master
         with:
-          host: 3.106.248.7  # Your AWS server IP
+          host: ${{ secrets.AWS_HOST }}  # Your AWS server IP
           username: ubuntu   # SSH user on AWS instance
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
 
