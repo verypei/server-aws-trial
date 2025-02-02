@@ -36,15 +36,34 @@ jobs:
           username: ubuntu               # SSH user on AWS instance
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
 
-      - name: Deploy application
-        run: |
-          # Save the SSH private key to a file
-          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }} --  ${{ secrets.AWS_HOST }} " > /tmp/aws_key.pem
-          chmod 600 /tmp/aws_key.pem  # Ensure correct permissions
+      # - name: Deploy application
+      #   run: |
+      #     # Save the SSH private key to a file
+      #     echo "${{ secrets.AWS_SSH_PRIVATE_KEY }} --  ${{ secrets.AWS_HOST }} " > /tmp/aws_key.pem
+      #     chmod 600 /tmp/aws_key.pem  # Ensure correct permissions
       
-          # SSH into the EC2 instance using the hostname
-          ssh -o StrictHostKeyChecking=no -i /tmp/aws_key.pem ubuntu@3.106.248.7 << 'EOF'
-            docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
-            docker-compose down  # Stop running containers (if any)
-            docker-compose up -d  # Rebuild and restart containers
-          EOF
+      #     # SSH into the EC2 instance using the hostname
+      #     ssh -o StrictHostKeyChecking=no -i /tmp/aws_key.pem ubuntu@3.106.248.7 << 'EOF'
+      #       docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
+      #       docker-compose down  # Stop running containers (if any)
+      #       docker-compose up -d  # Rebuild and restart containers
+      #     EOF
+
+      - name: executing remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/app/server-aws-trial
+            git reset --hard
+            git fetch origin 
+            git pull origin main
+            sudo docker compose down
+            sudo docker rmi gateway-api:1.0 || true
+            sudo docker container prune -f
+            sudo docker image prune -f
+            sudo docker compose build
+            sudo docker compose up --detach
+            sudo rm -f .env
