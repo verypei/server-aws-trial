@@ -43,7 +43,7 @@ jobs:
           chmod 600 /tmp/aws_key.pem  # Ensure correct permissions
       
           # SSH into the EC2 instance using the hostname
-          ssh -o StrictHostKeyChecking=no -i /tmp/aws_key.pem ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i /tmp/aws_key.pem ubuntu@3.106.248.7 << 'EOF'
             docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
             docker-compose down  # Stop running containers (if any)
             docker-compose up -d  # Rebuild and restart containers
