@@ -38,11 +38,13 @@ jobs:
 
       - name: Deploy application
         run: |
-          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > /tmp/aws_key.pem
-          chmod 600 /tmp/aws_key.pem
-          ssh -o StrictHostKeyChecking=no -i /tmp/aws_key.pem ubuntu@3.106.248.7 << 'EOF'
-            docker pull very438084/server-aws-trial:latest
-            docker-compose down
-            docker-compose up -d
+          # Save the SSH private key to a file
+          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }} --  ${{ secrets.AWS_HOST }} " > /tmp/aws_key.pem
+          chmod 600 /tmp/aws_key.pem  # Ensure correct permissions
+      
+          # SSH into the EC2 instance using the hostname
+          ssh -o StrictHostKeyChecking=no -i /tmp/aws_key.pem ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
+            docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
+            docker-compose down  # Stop running containers (if any)
+            docker-compose up -d  # Rebuild and restart containers
           EOF
-        
