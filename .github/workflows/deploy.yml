@@ -16,16 +16,16 @@ jobs:
 
       # Step 2: Set up SSH for connecting to your AWS server
       - name: Set up SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_HOST }}  # Your AWS server IP
-          username: ubuntu   # SSH user on AWS instance
-          key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa  # Save private key to a file
+          chmod 600 ~/.ssh/id_rsa  # Ensure correct permissions
+          ssh-keyscan -H 3.106.248.7 >> ~/.ssh/known_hosts  # Add the server to known_hosts
 
       # Step 3: Deploy your application on AWS
       - name: Deploy application on AWS
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@3.106.248.7 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.106.248.7 << 'EOF'
             cd /home/ubuntu/app
             git pull origin main  # Pull latest changes from the main branch
             docker-compose down  # Stop running containers (if any)
