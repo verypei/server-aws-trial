@@ -37,18 +37,10 @@ jobs:
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
 
       - name: Deploy application
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.AWS_HOST }}  # Your AWS server IP
-          username: ubuntu               # SSH user on AWS instance
-          key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
-          script: |
-            # Make sure the user can run Docker without sudo
-            sudo usermod -aG docker ubuntu
-            # Pull the latest Docker image
-            docker pull very438084/server-aws-trial:latest
-            # Stop running containers (if any)
-            docker-compose down
-            # Rebuild and restart containers
-            docker-compose up -d
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
+            cd /home/ubuntu/app/server-aws-trial  # Navigate to the correct directory
+            docker-compose down  # Stop any running containers
+            docker-compose up -d  # Start the containers in detached mode
+          EOF
         
