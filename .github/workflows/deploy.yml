@@ -44,6 +44,7 @@ jobs:
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           script: |
             cd ~/app/server-aws-trial
+            docker stop $(docker ps -q)
             docker pull very438084/server-aws-trial:latest
-            docker-compose down
-            docker-compose up -d
+            docker container prune -f
+            docker run -p 3000:3000 very438084/server-aws-trial:latest
