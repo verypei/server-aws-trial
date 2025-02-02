@@ -45,4 +45,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: yourdockerhubusername/yourimagename:latest
+          tags: very438084/server-aws-trial:latest
