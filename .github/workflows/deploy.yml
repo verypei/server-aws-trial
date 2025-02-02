@@ -8,9 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest  # Runs on a GitHub-hosted Ubuntu runner
-    
+
     steps:
-      # Step 1: Checkout the repo (for CI/CD if needed)
+      # Step 1: Checkout the repo
       - name: Checkout Repo
         uses: actions/checkout@v3
 
@@ -22,8 +22,8 @@ jobs:
           username: ubuntu               # SSH user on AWS instance
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
 
-      # Step 3: Pull the latest Docker image and restart the container
-      - name: Deploy application with Docker
+      # Step 3: Deploy your application
+      - name: Deploy application
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
             docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
