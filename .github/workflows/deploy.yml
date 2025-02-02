@@ -43,15 +43,30 @@ jobs:
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/app/server-aws-trial
+            # git pull origin main
+            # npm install
+            # sudo docker stop $(docker ps -q)
+            # sudo docker-compose down
+            # sudo docker pull very438084/server-aws-trial:latest
+            # sudo docker-compose up --build -d
+            # sudo docker container prune -f
+            # docker build --no-cache -t very438084/server-aws-trial .
+            # sudo docker run -p 3000:3000 very438084/server-aws-trial:latest
+            # Pull the latest changes from the repository
             git pull origin main
+
+            # Install project dependencies
             npm install
-            echo "Stopping all containers..."
-            sudo docker stop $(docker ps -q)
-            echo "Pulling latest image..."
+
+            # Stop and remove any running containers
+            sudo docker-compose down
+
+            # Pull the latest Docker image
             sudo docker pull very438084/server-aws-trial:latest
-            sudo docker-compose up --force-recreate --build -d
-            echo "Pruning containers..."
+
+            # Build and start the containers with the updated image
+            sudo docker-compose up --build -d
+
+            # Clean up unused Docker containers
             sudo docker container prune -f
-            echo "Running the container..."
-            docker build --no-cache -t very438084/server-aws-trial .
-            sudo docker run -p 3000:3000 very438084/server-aws-trial:latest
+

@@ -32,7 +32,7 @@ export class AppController {
   @Delete('data/:id')
   async deleteHello(@Param('id') id: string) {
     try {
-      return await this.appService.patchHello(id);
+      return await this.appService.deleteHello(id);
     } catch (error) {
     }
   }
