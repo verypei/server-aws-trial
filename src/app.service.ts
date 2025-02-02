@@ -25,4 +25,12 @@ export class AppService {
       throw error;
     }
   }
+
+  async deleteHello(id: string) {
+    try {
+      return `<h1>this is my id to delete : ${id}</h1>`;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

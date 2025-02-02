@@ -53,5 +53,5 @@ jobs:
             echo "Pruning containers..."
             sudo docker container prune -f
             echo "Running the container..."
-            sudo docker build -t very438084/server-aws-trial:latest
+            docker build --no-cache -t very438084/server-aws-trial .
             sudo docker run -p 3000:3000 very438084/server-aws-trial:latest
