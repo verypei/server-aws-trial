@@ -44,7 +44,11 @@ jobs:
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           script: |
             cd ~/app/server-aws-trial
-            docker stop $(docker ps -q)
-            docker pull very438084/server-aws-trial:latest
-            docker container prune -f
-            docker run -p 3000:3000 very438084/server-aws-trial:latest
+            echo "Stopping all containers..."
+            sudo docker stop $(docker ps -q)
+            echo "Pulling latest image..."
+            sudo docker pull very438084/server-aws-trial:latest
+            echo "Pruning containers..."
+            sudo docker container prune -f
+            echo "Running the container..."
+            sudo docker run -p 3000:3000 very438084/server-aws-trial:latest
