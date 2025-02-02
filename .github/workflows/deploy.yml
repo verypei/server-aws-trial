@@ -2,8 +2,7 @@ name: Deploy to AWS
 
 on:
   push:
-    branches:
-      - main  # Trigger action when pushing to the main branch
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -51,4 +50,4 @@ jobs:
             echo "Pruning containers..."
             sudo docker container prune -f
             echo "Running the container..."
-            sudo docker run very438084/server-aws-trial:latest
+            sudo docker run -p 3000:3000 very438084/server-aws-trial:latest
