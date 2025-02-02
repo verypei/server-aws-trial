@@ -14,6 +14,22 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
+        # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Build and push Docker image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+            context: .
+            file: ./Dockerfile
+            push: true
+            tags: very438084/server-aws-trial:latest
+
       # Step 2: Set up SSH for connecting to your AWS server
       - name: Set up SSH
         uses: appleboy/ssh-action@master
@@ -23,26 +39,12 @@ jobs:
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
 
       # Step 3: Deploy your application
-      - name: Deploy application
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
-            docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
-            docker-compose down  # Stop running containers (if any)
-            docker-compose up -d  # Rebuild and restart containers
-          EOF
+      # - name: Deploy application
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
+      #       docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
+      #       docker-compose down  # Stop running containers (if any)
+      #       docker-compose up -d  # Rebuild and restart containers
+      #     EOF
 
-      # Log in to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # Build and push Docker image
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: very438084/server-aws-trial:latest
+      
