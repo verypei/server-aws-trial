@@ -39,12 +39,12 @@ jobs:
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # GitHub secret for private SSH key
 
       # Step 3: Deploy your application
-      # - name: Deploy application
-      #   run: |
-      #     ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
-      #       docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
-      #       docker-compose down  # Stop running containers (if any)
-      #       docker-compose up -d  # Rebuild and restart containers
-      #     EOF
+      - name: Deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@$3.106.248.7 << 'EOF'
+            docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
+            docker-compose down  # Stop running containers (if any)
+            docker-compose up -d  # Rebuild and restart containers
+          EOF
 
       
