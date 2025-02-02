@@ -39,8 +39,7 @@ jobs:
       - name: Deploy application
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_SSH_PRIVATE_KEY }} ubuntu@${{ secrets.AWS_HOST }} << 'EOF'
-            cd /home/ubuntu/app/server-aws-trial  # Navigate to the correct directory
-            docker-compose down  # Stop any running containers
-            docker-compose up -d  # Start the containers in detached mode
+            docker pull very438084/server-aws-trial:latest  # Pull the latest Docker image
+            docker-compose down  # Stop running containers (if any)
+            docker-compose up -d  # Rebuild and restart containers
           EOF
-        
