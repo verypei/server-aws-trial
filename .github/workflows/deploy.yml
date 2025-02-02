@@ -26,9 +26,9 @@ jobs:
       - name: Deploy application on AWS
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.106.248.7 << 'EOF'
-            cd /home/ubuntu/app
-            git pull origin main  # Pull latest changes from the main branch
-            docker-compose down  # Stop running containers (if any)
+            cd /home/ubuntu/app  # Make sure you're in the right directory
+            git pull origin main  # Pull latest changes from the main branch (if needed)
+            docker-compose down  # Stop running containers (if needed)
             docker-compose up --build -d  # Rebuild and restart containers
           EOF
 
