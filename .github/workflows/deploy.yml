@@ -42,15 +42,14 @@ jobs:
           username: ubuntu
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           script: |
-            cd ~/app/server-aws-trial
-            git reset --hard
-            git fetch origin 
+            cd /home/ubuntu/app/server-aws-trial
             git pull origin main
             npm install
             echo "Stopping all containers..."
-            sudo docker stop $(docker ps -q)
+            sudo docker stop very438084/server-aws-trial:latest
             echo "Pulling latest image..."
             sudo docker pull very438084/server-aws-trial:latest
+            sudo docker-compose up --force-recreate --build -d
             echo "Pruning containers..."
             sudo docker container prune -f
             echo "Running the container..."
