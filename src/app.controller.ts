@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Head, Param, Patch, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -33,6 +33,14 @@ export class AppController {
   async deleteHello(@Param('id') id: string) {
     try {
       return await this.appService.patchHello(id);
+    } catch (error) {
+    }
+  }
+
+  @Head('data/:id')
+  async headHello(@Param('id') id: string) {
+    try {
+      return await this.appService.headHello(id);
     } catch (error) {
     }
   }

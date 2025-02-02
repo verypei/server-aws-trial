@@ -33,4 +33,12 @@ export class AppService {
       throw error;
     }
   }
+
+  async headHello(id: string) {
+    try {
+      return `<h1>this is my head id: ${id}</h1>`;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
