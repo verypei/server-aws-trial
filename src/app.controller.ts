@@ -37,12 +37,4 @@ export class AppController {
     }
   }
 
-  @Head('data/:id')
-  async headHello(@Param('id') id: string) {
-    try {
-      return await this.appService.headHello(id);
-    } catch (error) {
-    }
-  }
-
 }

@@ -32,7 +32,7 @@ export class AppService {
 
   async deleteHello(id: string) {
     try {
-      console.log("delete------");
+      console.log("delete from id : ", id);
 
       return `<h1>this is my id to delete : ${id}</h1>`;
     } catch (error) {
@@ -40,13 +40,4 @@ export class AppService {
     }
   }
 
-  async headHello(id: string) {
-    try {
-      console.log('head------');
-
-      return `<h1>this is my head id: ${id}</h1>`;
-    } catch (error) {
-      throw error;
-    }
-  }
 }

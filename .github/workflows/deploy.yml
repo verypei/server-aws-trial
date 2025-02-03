@@ -14,19 +14,19 @@ jobs:
         uses: actions/checkout@v3
 
         # Log in to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-            context: .
-            file: ./Dockerfile
-            push: true
-            tags: very438084/server-aws-trial:latest
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #       context: .
+      #       file: ./Dockerfile
+      #       push: true
+      #       tags: very438084/server-aws-trial:latest
 
       - name: Set up SSH
         uses: appleboy/ssh-action@master
@@ -43,30 +43,11 @@ jobs:
           key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/app/server-aws-trial
-            # git pull origin main
-            # npm install
-            # sudo docker stop $(docker ps -q)
-            # sudo docker-compose down
-            # sudo docker pull very438084/server-aws-trial:latest
-            # sudo docker-compose up --build -d
-            # sudo docker container prune -f
-            # docker build --no-cache -t very438084/server-aws-trial .
-            # sudo docker run -p 3000:3000 very438084/server-aws-trial:latest
-            # Pull the latest changes from the repository
+            git reset --hard
             git pull origin main
-
-            # Install project dependencies
             npm install
-
-            # Stop and remove any running containers
-            sudo docker-compose down
-
-            # Pull the latest Docker image
-            sudo docker pull very438084/server-aws-trial:latest
-
-            # Build and start the containers with the updated image
-            sudo docker-compose up --build -d
-
-            # Clean up unused Docker containers
+            sudo docker compose down
+            sudo docker compose build
+            sudo docker compose up --detach
             sudo docker container prune -f
 
