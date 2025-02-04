@@ -47,10 +47,10 @@ jobs:
             git pull origin main
             npm install
             sudo docker compose down
-            sudo docker compose build
-            sudo docker compose up --detach
             sudo docker container prune -af
             sudo apt-get autoremove
             sudo apt-get clean
             sudo docker image prune -af
+            sudo docker compose build
+            sudo docker compose up --detach
 
