@@ -44,6 +44,7 @@ jobs:
           script: |
             cd /home/ubuntu/app/server-aws-trial
             git reset --hard
+            sudo rm -rf node_modules
             sudo docker system prune -a -f --volumes
             sudo apt autoremove -y
             sudo apt autoclean
