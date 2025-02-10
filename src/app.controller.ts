@@ -1,23 +1,28 @@
-import { Controller, Delete, Get, Head, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Head, Inject, Param, Patch, Post } from '@nestjs/common';
 import { AppService } from './app.service';
+import { AUTH_REPOSITORY } from './constants';
+import { Auth } from './entity/auth.entity';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(
+    private readonly appService: AppService) { }
 
   @Get('data')
   async getHello() {
     try {
       return await this.appService.getHello();
     } catch (error) {
+      throw error
     }
   }
 
-  @Post('data/:id')
-  async postHello(@Param('id') id: string) {
+  @Post('data')
+  async postHello(@Param('id') id: string, @Body() body :any) {
     try {
-      return await this.appService.postHello(id);
+      return await this.appService.postHello(body);
     } catch (error) {
+      throw error
     }
   }
 
@@ -26,6 +31,7 @@ export class AppController {
     try {
       return await this.appService.patchHello(id);
     } catch (error) {
+      throw error
     }
   }
 
@@ -34,6 +40,7 @@ export class AppController {
     try {
       return await this.appService.deleteHello(id);
     } catch (error) {
+      throw error
     }
   }
 

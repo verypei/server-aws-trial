@@ -1,20 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { Auth } from './entity/auth.entity';
+import { AUTH_REPOSITORY } from './constants';
 
 @Injectable()
 export class AppService {
+  constructor(@Inject(AUTH_REPOSITORY) private authRepository: typeof Auth) { }
   async getHello() {
     try {
-      console.log("get------");
-      return '<h1>----------Hello World FROM DOCKER -------- !</h1>';
+      return await this.authRepository.findAll();
     } catch (error) {
       throw error;
     }
   }
 
-  async postHello(id: string) {
+  async postHello(payload: any) {
     try {
-      console.log("post------");
-      return `<h1>this is my id : ${id}</h1>`;
+      const data = await this.authRepository.create(payload);
+      return data
     } catch (error) {
       throw error;
     }
