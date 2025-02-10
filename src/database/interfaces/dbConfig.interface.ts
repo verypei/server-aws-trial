@@ -7,8 +7,8 @@ export interface IDatabaseConfigAttributes {
   dialect?: string;
   dialectOptions: {
     ssl: {
-      require: boolean,  // Enable SSL
-      rejectUnauthorized: boolean, // AWS RDS requires this setting
+      require: boolean,
+      rejectUnauthorized: boolean,
     },
   },
   urlDatabase?: string;

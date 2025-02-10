@@ -21,7 +21,7 @@ export const databaseConfig: IDatabaseConfig = {
     logging: false,
     synchronize: true,
     sync: {
-      force: true,
+      force: false,
       alter: { drop: true },
     },
   }
