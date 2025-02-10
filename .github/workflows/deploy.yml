@@ -44,7 +44,7 @@ jobs:
           script: |
             cd /home/ubuntu/app/server-aws-trial
             git reset --hard
-            docker system prune -a -f --volumes
+            sudo docker system prune -a -f --volumes
             sudo apt autoremove -y
             sudo apt autoclean
             git pull origin main
